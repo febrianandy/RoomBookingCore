@@ -2,10 +2,6 @@
 
 ![Dashboard](assets/dashboard.png)
 
-![Booking](assets/booking.png)
-
-![Calendar](assets/calendar.png)
-
 # 🏢 Room Booking System
 
 Aplikasi **manajemen peminjaman ruangan** berbasis **ASP.NET Core Razor Pages** yang dilengkapi dengan **REST API** untuk pengelolaan data peminjaman, persetujuan booking, dashboard statistik, kalender, serta ekspor laporan.
