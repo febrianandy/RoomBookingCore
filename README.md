@@ -1,94 +1,233 @@
-# Room Booking System - Technical Test
+# 🏢 Room Booking System
 
-Aplikasi manajemen peminjaman ruangan berbasis ASP.NET Core Razor Pages yang dilengkapi dengan REST API Contract.
+Aplikasi **manajemen peminjaman ruangan** berbasis **ASP.NET Core Razor Pages** yang dilengkapi dengan **REST API** untuk pengelolaan data peminjaman, persetujuan booking, dashboard statistik, kalender, serta ekspor laporan.
 
-## 🚀 Cara Menjalankan Proyek
-1. Pastikan Anda sudah menginstall **.NET SDK** (versi terbaru).
-2. Sesuaikan *Connection String* database MySQL di file `appsettings.json`.
-3. Jalankan migrasi database (jika diperlukan) atau pastikan database sudah terhubung.
-4. Buka terminal di folder proyek, lalu jalankan perintah:
-   ```bash
-   dotnet run
-#🔌 REST API Documentation (Blueprint Specification)
-Seluruh endpoint API publik tersedia di bawah Base URL:
+---
+
+## ✨ Fitur
+
+- 📋 Manajemen data ruangan
+- 📝 Pengajuan peminjaman ruangan
+- ✅ Approval / Rejection booking
+- 📊 Dashboard statistik
+- 📅 Calendar View
+- 📄 Export laporan (Excel)
+- 🔗 REST API
+
+---
+
+# 🚀 Cara Menjalankan Project
+
+## Persyaratan
+
+Pastikan telah menginstall:
+
+- .NET 8 SDK (atau versi terbaru)
+- MySQL Server
+
+## Konfigurasi Database
+
+Sesuaikan **Connection String** pada file:
+
+```json
+appsettings.json
+```
+
+Contoh:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "server=localhost;database=RoomBooking;user=root;password=yourpassword;"
+}
+```
+
+## Jalankan Migrasi Database
+
+Jika menggunakan Entity Framework Migration:
+
+```bash
+dotnet ef database update
+```
+
+## Menjalankan Aplikasi
+
+```bash
+dotnet run
+```
+
+Aplikasi akan berjalan pada:
+
+```
+https://localhost:xxxx
+```
+
+REST API:
+
+```
 http://localhost:5150/api/v1
+```
 
-1. Master Data Ruangan
-Endpoint: GET /api/v1/rooms
-Deskripsi: Mengambil seluruh daftar ruangan yang tersedia di dalam sistem.
-Response (200 OK):
-JSON
-`[
+---
+
+# 🔌 REST API Documentation
+
+## Base URL
+
+```
+http://localhost:5150/api/v1
+```
+
+---
+
+## 1. Get All Rooms
+
+### Endpoint
+
+```http
+GET /rooms
+```
+
+### Description
+
+Mengambil seluruh daftar ruangan.
+
+### Response
+
+```json
+[
   {
     "id": 1,
     "name": "Ruang Meeting A",
     "capacity": 10,
     "location": "Lantai 2"
   }
-]`
-2. Dashboard Summary / Statistik
-Endpoint: GET /api/v1/dashboard/summary
-Deskripsi: Menampilkan ringkasan metrik statistik untuk dasbor utama.
-Response (200 OK):
-JSON
-`{
+]
+```
+
+---
+
+## 2. Dashboard Summary
+
+### Endpoint
+
+```http
+GET /dashboard/summary
+```
+
+### Description
+
+Menampilkan ringkasan statistik dashboard.
+
+### Response
+
+```json
+{
   "totalRooms": 5,
   "totalBookings": 12,
   "pending": 2,
   "approved": 9,
   "rejected": 1
-}`
-3. Pengajuan Peminjaman Ruangan (Create Booking)
-Endpoint: POST /api/v1/bookings
-Deskripsi: Mengajukan jadwal peminjaman ruangan baru.
-Request Headers: Content-Type: application/json
-Request Body:
-JSON
-`{
+}
+```
+
+---
+
+## 3. Create Booking
+
+### Endpoint
+
+```http
+POST /bookings
+```
+
+### Headers
+
+```text
+Content-Type: application/json
+```
+
+### Request Body
+
+```json
+{
   "roomId": 1,
   "userId": 1,
   "departmentId": 1,
   "title": "Rapat Koordinasi Proyek",
   "startTime": "2026-08-10T09:00:00",
   "endTime": "2026-08-10T11:00:00"
-}`
-Response (201 Created):
+}
+```
 
-JSON
-`{
+### Response
+
+```json
+{
   "message": "Peminjaman berhasil diajukan.",
   "bookingId": 15
-}`
-4. Eksekusi Status Booking (Approve / Reject)
-Endpoint: PUT /api/v1/bookings/{id}/status
-Deskripsi: Mengubah status pengajuan peminjaman (menyetujui atau menolak).
-Request Headers: Content-Type: application/json
-Request Body (Contoh Reject):
+}
+```
 
-JSON
-`{
-  "status": "Rejected",
-  "rejectionReason": "Ruangan sedang digunakan untuk acara kedinasan."
-}`
-Request Body (Contoh Approve)
-JSON
-`{
+---
+
+## 4. Update Booking Status
+
+### Endpoint
+
+```http
+PUT /bookings/{id}/status
+```
+
+### Headers
+
+```text
+Content-Type: application/json
+```
+
+### Approve Request
+
+```json
+{
   "status": "Approved",
   "rejectionReason": null
-}`
-Response (200 OK):
+}
+```
 
-JSON
-`{
+### Reject Request
+
+```json
+{
+  "status": "Rejected",
+  "rejectionReason": "Ruangan sedang digunakan untuk acara kedinasan."
+}
+```
+
+### Response
+
+```json
+{
   "message": "Status peminjaman berhasil diperbarui."
-}`
+}
+```
 
-5. Jadwal Kalender (Calendar View Data)
-Endpoint: GET /api/v1/bookings/calendar
-Deskripsi: Mengambil daftar peminjaman yang hanya berstatus 'Approved' untuk ditampilkan pada antarmuka kalender.
-Response (200 OK):
-JSON
-`[
+---
+
+## 5. Calendar Events
+
+### Endpoint
+
+```http
+GET /bookings/calendar
+```
+
+### Description
+
+Mengambil seluruh booking yang telah disetujui untuk ditampilkan pada kalender.
+
+### Response
+
+```json
+[
   {
     "id": 12,
     "title": "Rapat Koordinasi Proyek",
@@ -96,16 +235,91 @@ JSON
     "end": "2026-08-10T11:00:00",
     "roomName": "Ruang Meeting A"
   }
-]`
+]
+```
 
-6. Ekspor Laporan (Export Excel)
-Endpoint: GET /api/v1/reports/export/excel
-Deskripsi: Mengunduh berkas laporan rekapitulasi data peminjaman ruangan.
-Response (200 OK / File Stream): Berkas berformat .xlsx siap diunduh
+---
 
-#🛠️ Tech Stack
-Framework: ASP.NET Core (.NET 8 / Latest)
-UI Layer: Razor Pages + Bootstrap
-API Layer: ASP.NET Core Web API Controllers (/api/v1/...)
-ORM: Entity Framework Core dengan MySQL (Pomelo Provider)
-Reporting: QuestPDF
+## 6. Export Excel
+
+### Endpoint
+
+```http
+GET /reports/export/excel
+```
+
+### Description
+
+Mengunduh laporan peminjaman dalam format **Excel (.xlsx)**.
+
+### Response
+
+```
+File (.xlsx)
+```
+
+---
+
+# 🛠️ Tech Stack
+
+| Technology | Description |
+|------------|-------------|
+| Framework | ASP.NET Core 8 |
+| UI | Razor Pages |
+| CSS | Bootstrap 5 |
+| API | ASP.NET Core Web API |
+| ORM | Entity Framework Core |
+| Database | MySQL |
+| Provider | Pomelo Entity Framework Core MySQL |
+| Reporting | QuestPDF |
+
+---
+
+# 📁 Struktur Project
+
+```
+RoomBookingSystem
+│
+├── Controllers
+├── Pages
+├── Models
+├── Data
+├── Services
+├── DTOs
+├── wwwroot
+├── appsettings.json
+└── Program.cs
+```
+
+---
+
+# 📌 API Summary
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/rooms` | Daftar ruangan |
+| GET | `/dashboard/summary` | Statistik dashboard |
+| POST | `/bookings` | Pengajuan booking |
+| PUT | `/bookings/{id}/status` | Approve / Reject booking |
+| GET | `/bookings/calendar` | Data kalender |
+| GET | `/reports/export/excel` | Export laporan Excel |
+
+---
+
+# 👨‍💻 Tech Test
+
+Project ini dibuat sebagai **Technical Test** menggunakan:
+
+- ASP.NET Core 8
+- Razor Pages
+- Entity Framework Core
+- MySQL
+- REST API
+- Bootstrap
+- QuestPDF
+
+---
+
+## 📄 License
+
+Project ini dibuat untuk keperluan **Technical Assessment / Portfolio**.
