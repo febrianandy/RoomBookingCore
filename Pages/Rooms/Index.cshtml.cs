@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RoomBookingCore.Data;
@@ -6,6 +7,7 @@ using RoomBookingCore.Models;
 
 namespace RoomBookingCore.Pages.Rooms
 {
+    [Authorize(Roles = "SuperUser,Admin")]
     public class IndexModel : PageModel
     {
         private readonly AppDbContext _context;
