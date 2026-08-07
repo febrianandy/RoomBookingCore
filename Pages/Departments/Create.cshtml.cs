@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RoomBookingCore.Data;
 using RoomBookingCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RoomBookingCore.Pages.Departments
 {
+    [Authorize(Roles = "SuperUser,Admin")]
     public class CreateModel : PageModel
     {
         private readonly AppDbContext _context;

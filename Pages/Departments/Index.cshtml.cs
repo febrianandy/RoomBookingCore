@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RoomBookingCore.Data;
@@ -7,7 +6,6 @@ using RoomBookingCore.Models;
 
 namespace RoomBookingCore.Pages.Departments
 {
-    [Authorize(Roles = "SuperUser,Admin")]
     public class IndexModel : PageModel
     {
         private readonly AppDbContext _context;
@@ -19,9 +17,15 @@ namespace RoomBookingCore.Pages.Departments
 
         public IList<Department> Departments { get; set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            if (!User.IsInRole("SuperUser") && !User.IsInRole("Admin"))
+            {
+                return RedirectToPage("/Index");
+            }
+
             Departments = await _context.Departments.ToListAsync();
+            return Page();
         }
     }
 }

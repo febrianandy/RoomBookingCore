@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RoomBookingCore.Data;
 using RoomBookingCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RoomBookingCore.Pages.Departments
 {
+    [Authorize(Roles = "SuperUser,Admin")]
     public class DeleteModel : PageModel
     {
         private readonly AppDbContext _context;
