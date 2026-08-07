@@ -8,9 +8,9 @@ namespace RoomBookingCore.Services
 {
     public class BookingService
     {
-        private readonly AppDbContext _context; // Ubah ke AppDbContext
+        private readonly AppDbContext _context; 
 
-        public BookingService(AppDbContext context) // Ubah ke AppDbContext
+        public BookingService(AppDbContext context)
         {
             _context = context;
         }
