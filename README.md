@@ -68,13 +68,13 @@ dotnet run
 Aplikasi akan berjalan pada:
 
 ```
-https://localhost:xxxx
+https://localhost:5150
 ```
 
 REST API:
 
 ```
-http://localhost:5150/api/v1
+http://localhost:5150/api/v1/bookings/calendar
 ```
 
 ---
