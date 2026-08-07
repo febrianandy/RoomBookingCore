@@ -1,0 +1,110 @@
+@page
+@model RoomBookingCore.Pages.Reports.IndexModel
+@{
+    ViewData["Title"] = "Laporan Peminjaman Ruangan";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+        <div>
+            <h2 class="fw-bold">Laporan Peminjaman Ruangan</h2>
+            <p class="text-muted mb-0">Rekapitulasi seluruh data peminjaman ruangan kantor.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-page-handler="ExportPdf" target="_blank" class="btn btn-danger shadow-sm">
+                <i class="fa-solid fa-file-pdf me-1"></i> Export PDF
+            </a>
+            <!-- Tombol Export Excel -->
+            <a asp-page-handler="ExportExcel" class="btn btn-success shadow-sm">
+                <i class="fa-solid fa-file-excel me-1"></i> Export ke Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- 3 KOTAK CARD RANGKUMAN -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary shadow-sm rounded-3 border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small fw-semibold opacity-75">Total Pengajuan</h6>
+                    <h3 class="fw-bold mb-0">@Model.TotalBookings</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success shadow-sm rounded-3 border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small fw-semibold opacity-75">Disetujui (Approved)</h6>
+                    <h3 class="fw-bold mb-0">@Model.ApprovedCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning shadow-sm rounded-3 border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase small fw-semibold opacity-75 text-dark">Menunggu (Pending)</h6>
+                    <h3 class="fw-bold mb-0 text-dark">@Model.PendingCount</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABEL LAPORAN -->
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No</th>
+                            <th>Pemohon</th>
+                            <th>Departemen</th>
+                            <th>Ruangan</th>
+                            <th>Tanggal & Waktu</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Bookings != null && Model.Bookings.Any())
+                        {
+                            int no = 1;
+                            foreach (var item in Model.Bookings)
+                            {
+                                <tr>
+                                    <td>@(no++)</td>
+                                    <td class="fw-semibold">@(item.User?.Email ?? "-")</td>
+                                    <td>@(item.Department?.DepartmentName ?? "-")</td>
+                                    <td>@(item.Room?.RoomName ?? "-")</td>
+                                    <td>
+                                        <div>@item.StartTime.ToString("dd MMM yyyy")</div>
+                                        <small class="text-muted">@item.StartTime.ToString("HH:mm") - @item.EndTime.ToString("HH:mm")</small>
+                                    </td>
+                                    <td>
+                                        @if (item.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">Approved</span>
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">Belum ada data laporan peminjaman.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

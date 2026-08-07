@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Room Booking System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Reset dan paksa layout menjadi Flexbox berdampingan */
+        html, body {
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background-color: #f8f9fa !important;
+        }
+        .main-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+            min-height: 100vh !important;
+        }
+        #sidebar {
+            width: 260px !important;
+            min-width: 260px !important;
+            background-color: #212529 !important;
+            color: #fff !important;
+        }
+        #sidebar .nav-link {
+            color: #adb5bd;
+            padding: 12px 20px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        #sidebar .nav-link:hover, #sidebar .nav-link.active {
+            color: #fff;
+            background-color: #0d6efd;
+        }
+        #sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        #content-area {
+            flex-grow: 1 !important;
+            width: calc(100% - 260px) !important;
+            padding: 20px !important;
+            overflow-y: auto !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <!-- SIDEBAR DI KIRI -->
+        <nav id="sidebar" class="p-3">
+            <div class="sidebar-header">
+                <h4 class="text-white py-3 px-2 border-bottom border-secondary">
+                    <i class="fa-solid fa-door-open"></i> Room Booking
+                </h4>
+            </div>
+            <ul class="nav flex-column mt-3">
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Index">
+                        <i class="fa-solid fa-chart-pie"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/BookingForm">
+                        <i class="fa-solid fa-calendar-plus"></i> Form Booking
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Bookings/Calendar">
+                        <i class="fa-solid fa-calendar-days me-1"></i> Kalender Pintar
+                    </a>
+                </li>
+                
+                @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                {
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Bookings/Approval">
+                        <i class="fa-solid fa-clipboard-check"></i> Approval Bookings
+                    </a>
+                </li>
+                }
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Bookings/Calender">
+                        <i class="fa-solid fa-calendar-days"></i> Kalender Jadwal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Rooms/Index">
+                        <i class="fa-solid fa-building-shield"></i> Master Ruangan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Departments/Index"><i class="fa-solid fa-building-shield"></i> Departemen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-page="/Reports/Index">
+                        <i class="fa-solid fa-file-excel"></i> Laporan Rekap
+                    </a>
+                </li>
+
+                <!-- GARIS PEMBATAS HALUS -->
+                <li><hr class="dropdown-divider bg-secondary my-3"></li>
+
+                <!-- TOMBOL LOGOUT YANG RAPI -->
+                <li class="nav-item">
+                    <form method="get" asp-page="/Logout">
+                        <button type="submit" class="nav-link text-danger border-0 bg-transparent w-100 text-start">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- KONTEN UTAMA DI KANAN -->
+        <div id="content-area">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 rounded shadow-sm px-4 py-3">
+                <div class="container-fluid">
+                    <span class="navbar-brand mb-0 h6 text-muted">Sistem Informasi Peminjaman Ruangan Kantor</span>
+                    <div class="d-flex align-items-center">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            // Mengambil Role dari Claims
+                            var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value ?? "User";
+                            var userEmail = User.Identity.Name ?? "Akun";
+
+                            // Menentukan warna badge berdasarkan role
+                            var badgeClass = userRole switch
+                            {
+                                "SuperUser" => "bg-danger",
+                                "Admin" => "bg-warning text-dark",
+                                _ => "bg-primary"
+                            };
+
+                            <div class="text-end me-3">
+                                <span class="d-block fw-bold text-dark small">@userEmail</span>
+                                <span class="badge @badgeClass">@userRole</span>
+                            </div>
+                            <i class="fa-solid fa-user-circle fa-2x text-secondary"></i>
+                        }
+                        else
+                        {
+                            <a asp-page="/Login" class="btn btn-outline-primary btn-sm">Login</a>
+                        }
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid px-2">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

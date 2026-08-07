@@ -1,0 +1,69 @@
+@page
+@model RoomBookingCore.Pages.Rooms.IndexModel
+@{
+    ViewData["Title"] = "Master Data Ruangan";
+}
+
+<div class="container-fluid">
+    <h2>Master Data Ruangan</h2>
+    <hr />
+
+    @if (!string.IsNullOrEmpty(Model.Message))
+    {
+        <div class="alert alert-success">@Model.Message</div>
+    }
+
+    <div class="row">
+        <!-- Tabel Daftar Ruangan -->
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-dark text-white">Daftar Ruangan Tersedia</div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Ruangan</th>
+                                <th>Kapasitas</th>
+                                <th>Fasilitas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var room in Model.RoomList)
+                            {
+                                <tr>
+                                    <td><strong>@room.RoomName</strong></td>
+                                    <td>@room.Capacity Orang</td>
+                                    <td>@room.Facilities</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Tambah Ruangan -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">Tambah Ruangan Baru</div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Nama Ruangan</label>
+                            <input asp-for="NewRoom.RoomName" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Kapasitas (Orang)</label>
+                            <input asp-for="NewRoom.Capacity" type="number" class="form-control" required />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Fasilitas</label>
+                            <textarea asp-for="NewRoom.Facilities" class="form-control" placeholder="Contoh: Projector, AC, Sound System"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Simpan Ruangan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

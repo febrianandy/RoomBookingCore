@@ -1,0 +1,115 @@
+@page
+@model RoomBookingCore.Pages.Bookings.ApprovalModel
+@{
+    ViewData["Title"] = "Persetujuan Peminjaman Ruangan";
+}
+
+<!-- Modal Alasan Penolakan -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Reject">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger fw-bold" id="rejectModalLabel">Alasan Penolakan Peminjaman</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="rejectBookingId" name="id" />
+                    <div class="mb-3">
+                        <label for="reason" class="form-label fw-semibold">Silakan tulis alasan penolakan:</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="3" required placeholder="Contoh: Ruangan sedang dalam perbaikan / Jadwal bentrok."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Kirim Penolakan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    <h2 class="mt-4 fw-bold">Persetujuan Peminjaman Ruangan</h2>
+    <p class="text-muted">Kelola pengajuan peminjaman ruangan dari para pegawai.</p>
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @Html.Raw(Model.StatusMessage)
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Pemohon</th>
+                            <th>Ruangan</th>
+                            <th>Waktu & Detail</th>
+                            <th>Status</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.PendingBookings.Any())
+                        {
+                            foreach (var item in Model.PendingBookings)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@(item.User?.Email ?? "N/A")</div>
+                                    </td>
+                                    <td><span class="fw-semibold">@(item.Room?.RoomName ?? "N/A")</span></td>
+                                    <td>
+                                        <!-- Sesuaikan nama properti di bawah ini dengan model Booking.cs Anda jika diperlukan -->
+                                        <small class="text-muted">Mulai: @item.StartTime - Selesai: @item.EndTime</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <form method="post" class="d-inline">
+                                            <button type="submit" asp-page-handler="Approve" asp-route-id="@item.BookingId" class="btn btn-success btn-sm me-1" onclick="return confirm('Setujui peminjaman ini?')">
+                                                <i class="fa-solid fa-check"></i> Setujui
+                                            </button>
+                                        </form>
+                                        <form method="post" class="d-inline">
+                                           <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-booking-id="@item.BookingId">
+                                                Tolak
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="fa-solid fa-circle-check fa-2x mb-2 text-success"></i>
+                                    <p class="mb-0">Tidak ada pengajuan peminjaman yang menunggu persetujuan.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var rejectModal = document.getElementById('rejectModal');
+        rejectModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var bookingId = button.getAttribute('data-booking-id');
+            var inputBookingId = rejectModal.querySelector('#rejectBookingId');
+            inputBookingId.value = bookingId;
+        });
+    </script>
+}

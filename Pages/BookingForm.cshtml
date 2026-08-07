@@ -1,0 +1,68 @@
+@page
+@model RoomBookingCore.Pages.BookingFormModel
+@{
+    ViewData["Title"] = "Form Peminjaman Ruangan";
+}
+
+<div class="container py-4" style="max-width: 650px;">
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
+            <h3 class="fw-bold text-dark mb-1">Form Peminjaman Ruangan</h3>
+            <p class="text-muted small mb-4">Isi detail waktu dan keperluan rapat Anda di bawah ini.</p>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-circle-check me-1"></i> @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i> @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="mb-3">
+                    <label asp-for="Input.RoomId" class="form-label fw-semibold"></label>
+                    <select asp-for="Input.RoomId" asp-items="Model.RoomList" class="form-select">
+                        <option value="">-- Pilih Ruangan --</option>
+                    </select>
+                    <span asp-validation-for="Input.RoomId" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.StartTime" class="form-label fw-semibold"></label>
+                    <input asp-for="Input.StartTime" class="form-control" type="datetime-local" step="60" />
+                    <span asp-validation-for="Input.StartTime" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.EndTime" class="form-label fw-semibold"></label>
+                    <input asp-for="Input.EndTime" class="form-control" type="datetime-local" step="60" />
+                    <span asp-validation-for="Input.EndTime" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Title" class="form-label fw-semibold"></label>
+                    <input asp-for="Input.Title" class="form-control" placeholder="Contoh: Rapat Koordinasi Tim IT" />
+                    <span asp-validation-for="Input.Title" class="text-danger"></span>
+                </div>
+                <div class="alert alert-light border py-2 px-3 small mb-4 text-muted">
+                    <i class="fa-solid fa-circle-info text-primary me-1"></i> Peminjaman akan otomatis tercatat atas akun dan departemen Anda yang sedang aktif.
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-page="Index" class="btn btn-secondary">Kembali</a>
+                    <button type="submit" class="btn btn-primary">Ajukan Peminjaman</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
