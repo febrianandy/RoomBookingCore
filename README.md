@@ -1,3 +1,6 @@
+# 🏢 Room Booking System
+
+Note Aplikasi ini didevelop berbasis **ASP.NET Core Razor Pages** tetapi juga dilengkapi dengan **REST API** apabila kedepanya akan dihubungkan ke frontend app seperti React Js,Vuejs,Etc
 ## 📸 Preview
 
 | Preview Dashboard | Preview Bookings |
@@ -9,11 +12,6 @@
 | :---: | :---: |
 | ![Approval](assets/approval.png) | ![Laporan](assets/laporan.png) |
 | *Gambar 3: Approval Status* | *Gambar 4: Laporan* |
-
-# 🏢 Room Booking System
-
-Note Aplikasi ini didevelop berbasis **ASP.NET Core Razor Pages** tetapi juga dilengkapi dengan **REST API** apabila kedepanya akan dihubungkan ke frontend app seperti React Js,Vuejs,Etc
-
 ---
 
 ## ✨ Fitur
