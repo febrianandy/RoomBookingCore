@@ -1,6 +1,9 @@
 ## 📸 Preview
 
 ![Dashboard](assets/dashboard.png)
+![Dashboard](assets/bookings.png)
+![Dashboard](assets/approval.png)
+![Dashboard](assets/laporan.png)
 
 # 🏢 Room Booking System
 
