@@ -1,4 +1,4 @@
-# 🏢 Room Booking System
+# Room Booking System
 
 Note Aplikasi ini didevelop berbasis **ASP.NET Core Razor Pages** tetapi juga dilengkapi dengan **REST API** apabila kedepanya akan dihubungkan ke frontend app seperti React Js,Vuejs,Etc
 ## 📸 Preview
@@ -14,19 +14,19 @@ Note Aplikasi ini didevelop berbasis **ASP.NET Core Razor Pages** tetapi juga di
 | *Gambar 3: Approval Status* | *Gambar 4: Laporan* |
 ---
 
-## ✨ Fitur
+## Fitur
 
-- 📋 Manajemen data ruangan
-- 📝 Pengajuan peminjaman ruangan
-- ✅ Approval / Rejection booking
-- 📊 Dashboard statistik
-- 📅 Calendar View
-- 📄 Export laporan (Excel)
-- 🔗 REST API
+- Manajemen data ruangan
+- Pengajuan peminjaman ruangan
+- Approval / Rejection booking
+- Dashboard statistik
+- Calendar View
+- Export laporan (Excel)
+- REST API
 
 ---
 
-# 🚀 Cara Menjalankan Project
+# Cara Menjalankan Project
 
 ## Persyaratan
 
@@ -79,7 +79,7 @@ http://localhost:5150/api/v1
 
 ---
 
-# 🔌 REST API Documentation
+# REST API Documentation
 
 ## Base URL
 
@@ -270,7 +270,7 @@ File (.xlsx)
 
 ---
 
-# 🛠️ Tech Stack
+# Tech Stack
 
 | Technology | Description |
 |------------|-------------|
@@ -285,7 +285,7 @@ File (.xlsx)
 
 ---
 
-# 📁 Struktur Project
+# Struktur Project
 
 ```
 RoomBookingSystem
@@ -303,7 +303,7 @@ RoomBookingSystem
 
 ---
 
-# 📌 API Summary
+# API Summary
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
@@ -316,7 +316,7 @@ RoomBookingSystem
 
 ---
 
-# 👨‍💻 Tech Test
+# Tech Test
 
 Project ini dibuat sebagai **Technical Test** menggunakan:
 
@@ -330,6 +330,6 @@ Project ini dibuat sebagai **Technical Test** menggunakan:
 
 ---
 
-## 📄 License
+## License
 
 Project ini dibuat untuk keperluan **Technical Assessment / Portfolio**.
