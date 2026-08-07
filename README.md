@@ -1,10 +1,14 @@
 ## 📸 Preview
 
+| Preview Dashboard | Preview Bookings |
+| :---: | :---: |
+| ![Dashboard](assets/dashboard.png) | ![Bookings](assets/bookings.png) |
+| *Gambar 1: Dashboard Utama* | *Gambar 2: Data Bookings* |
 
-![Dashboard](assets/dashboard.png)
-![Dashboard](assets/bookings.png)
-![Dashboard](assets/approval.png)
-![Dashboard](assets/laporan.png)
+| Preview Approval | Preview Laporan |
+| :---: | :---: |
+| ![Approval](assets/approval.png) | ![Laporan](assets/laporan.png) |
+| *Gambar 3: Approval Status* | *Gambar 4: Laporan* |
 
 # 🏢 Room Booking System
 
