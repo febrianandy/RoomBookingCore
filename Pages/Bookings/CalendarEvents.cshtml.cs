@@ -48,7 +48,7 @@ namespace RoomBookingCore.Pages.Bookings
 
         private string GetRoomColor(int roomId)
         {
-            string[] colors = { "#0d6efd", "#198754", "#ffc107", "#dc3545", "#6f42c1", "#fd7e14" };
+            string[] colors = { "#0d6efd", "#198754", "#ffc107", "#fc0720", "#6f42c1", "#fd7e14" };
             return colors[roomId % colors.Length];
         }
     }

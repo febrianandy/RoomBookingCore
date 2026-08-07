@@ -30,12 +30,12 @@ namespace RoomBookingCore.Pages
 
             [Required(ErrorMessage = "Waktu mulai wajib diisi.")]
             [Display(Name = "Waktu Mulai")]
-            public DateTime StartTime { get; set; } = 
+            public DateTime StartTime { get; set; } =
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0);
 
             [Required(ErrorMessage = "Waktu selesai wajib diisi.")]
             [Display(Name = "Waktu Selesai")]
-            public DateTime EndTime { get; set; } = 
+            public DateTime EndTime { get; set; } =
                 new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, 0).AddHours(1);
 
             [Required(ErrorMessage = "Keperluan rapat wajib diisi.")]
@@ -58,6 +58,14 @@ namespace RoomBookingCore.Pages
                 return Page();
             }
 
+            if (Input.EndTime <= Input.StartTime)
+            {
+                ModelState.AddModelError("Input.EndTime", "Waktu selesai harus lebih besar dari waktu mulai.");
+                TempData["ErrorMessage"] = "Waktu peminjaman tidak valid.";
+                await LoadRoomsDropdownAsync();
+                return Page();
+            }
+
             var userEmail = User.Identity?.Name;
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -71,6 +79,20 @@ namespace RoomBookingCore.Pages
             if (currentUser == null)
             {
                 TempData["ErrorMessage"] = "Data user yang sedang login tidak ditemukan di database.";
+                await LoadRoomsDropdownAsync();
+                return Page();
+            }
+
+            var isRoomBooked = await _context.Bookings
+                .AnyAsync(b => b.RoomId == Input.RoomId && 
+                            // Blokir jika statusnya masih Pending ATAU sudah Approved
+                            (b.Status == "Pending" || b.Status == "Approved") && 
+                            Input.StartTime < b.EndTime && 
+                            Input.EndTime > b.StartTime);
+
+            if (isRoomBooked)
+            {
+                TempData["ErrorMessage"] = "Maaf, ruangan tersebut sedang dipesan atau menunggu persetujuan pada rentang waktu tersebut!";
                 await LoadRoomsDropdownAsync();
                 return Page();
             }
@@ -91,13 +113,11 @@ namespace RoomBookingCore.Pages
                 _context.Bookings.Add(booking);
                 await _context.SaveChangesAsync();
 
-                // Pesan Sukses
                 TempData["SuccessMessage"] = "Peminjaman ruangan berhasil diajukan dan sedang menunggu persetujuan!";
                 return RedirectToPage("./BookingForm");
             }
             catch (Exception)
             {
-                // Pesan Gagal jika terjadi error database
                 TempData["ErrorMessage"] = "Terjadi kesalahan sistem saat menyimpan data peminjaman.";
                 await LoadRoomsDropdownAsync();
                 return Page();
