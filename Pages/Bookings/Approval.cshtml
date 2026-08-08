@@ -17,7 +17,8 @@
                     <input type="hidden" id="rejectBookingId" name="id" />
                     <div class="mb-3">
                         <label for="reason" class="form-label fw-semibold">Silakan tulis alasan penolakan:</label>
-                        <textarea class="form-control" id="reason" name="reason" rows="3" required placeholder="Contoh: Ruangan sedang dalam perbaikan / Jadwal bentrok."></textarea>
+                        <textarea class="form-control" id="reason" name="reason" rows="3" required
+                                  placeholder="Contoh: Ruangan sedang dalam perbaikan / Jadwal bentrok."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -51,7 +52,10 @@
                             <th>Ruangan</th>
                             <th>Waktu & Detail</th>
                             <th>Status</th>
-                            <th class="text-center">Aksi</th>
+                            @if (User.IsInRole("Admin") || User.IsInRole("SuperUser"))
+                            {
+                                <th class="text-center">Aksi</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -69,20 +73,42 @@
                                         <small class="text-muted">Mulai: @item.StartTime - Selesai: @item.EndTime</small>
                                     </td>
                                     <td>
-                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        @if (item.Status == "Pending")
+                                        {
+                                            <span class="badge bg-warning text-dark">Pending</span>
+                                        }
+                                        else if (item.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">Disetujui</span>
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">Ditolak</span>
+                                        }
                                     </td>
-                                    <td class="text-center">
-                                        <form method="post" class="d-inline">
-                                            <button type="submit" asp-page-handler="Approve" asp-route-id="@item.BookingId" class="btn btn-success btn-sm me-1" onclick="return confirm('Setujui peminjaman ini?')">
-                                                <i class="fa-solid fa-check"></i> Setujui
-                                            </button>
-                                        </form>
-                                        <form method="post" class="d-inline">
-                                           <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" data-booking-id="@item.BookingId">
-                                                Tolak
-                                            </button>
-                                        </form>
-                                    </td>
+                                    @if ((User.IsInRole("Admin") || User.IsInRole("SuperUser")) && item.Status == "Pending")
+                                    {
+                                        <td class="text-center">
+                                            <form method="post" class="d-inline">
+                                                <button type="submit" asp-page-handler="Approve" asp-route-id="@item.BookingId"
+                                                        class="btn btn-success btn-sm me-1"
+                                                        onclick="return confirm('Setujui peminjaman ini?')">
+                                                    <i class="fa-solid fa-check"></i> Setujui
+                                                </button>
+                                            </form>
+                                            <form method="post" class="d-inline">
+                                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#rejectModal" data-booking-id="@item.BookingId">
+                                                    Tolak
+                                                </button>
+                                            </form>
+                                        </td>
+                                    }else if ((User.IsInRole("Admin") || User.IsInRole("SuperUser")) && (item.Status == "Rejected" || item.Status == "Approved"))
+                                    {
+                                        <td class="text-center">
+                                            <span class="text-muted">-</span>
+                                        </td>
+                                    }
                                 </tr>
                             }
                         }

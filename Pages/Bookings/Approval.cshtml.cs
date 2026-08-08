@@ -7,7 +7,7 @@ using RoomBookingCore.Models;
 
 namespace RoomBookingCore.Pages.Bookings
 {
-    [Authorize(Roles = "SuperUser,Admin")]
+    [Authorize(Roles = "SuperUser,Admin,Pegawai")]
     public class ApprovalModel : PageModel
     {
         private readonly AppDbContext _context;
@@ -28,8 +28,8 @@ namespace RoomBookingCore.Pages.Bookings
                 .Include(b => b.Room)
                 .Include(b => b.User)
                 .Include(b => b.Department)
-                .Where(b => b.Status == "Pending")
-                .OrderBy(b => b.StartTime)
+                .Where(b => b.Status == "Pending" || b.Status == "Rejected" || b.Status == "Approved")
+                .OrderByDescending(b => b.BookingId)
                 .ToListAsync();
         }
 
